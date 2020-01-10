@@ -316,40 +316,6 @@ Module Mod_Space_Bin_Functions
             BSMO.bsmo_t9(k).v = br.ReadUInt32
 
         Next
-
-
-
-    End Sub
-
-    Public Sub get_WSMI_data(ByVal t_cnt As Integer)
-
-        Dim ms As New MemoryStream(space_table_rows(t_cnt).data)
-        Dim br As New BinaryReader(ms)
-        ms.Position = 0
-
-        WSMI.t1_start = br.BaseStream.Position
-        WSMI.t1_dl = br.ReadUInt32
-        WSMI.t1_dc = br.ReadUInt32
-
-        ReDim WSMI.wsmi_t1(WSMI.t1_dc)
-        For k = 0 To WSMI.t1_dc - 1
-            WSMI.wsmi_t1(k).flag1 = br.ReadUInt32
-            WSMI.wsmi_t1(k).flag2 = br.ReadUInt32
-            WSMI.wsmi_t1(k).flag3 = br.ReadUInt32
-        Next
-
-        WSMI.t2_start = br.BaseStream.Position
-        WSMI.t2_dl = br.ReadUInt32
-        WSMI.t2_dc = br.ReadUInt32
-
-        ReDim WSMI.wsmi_t2(WSMI.t2_dc)
-        For k = 0 To WSMI.t2_dc - 2
-            WSMI.wsmi_t2(k).flag1 = br.ReadUInt32
-        Next
-
-        br.Close()
-        ms.Dispose()
-
     End Sub
 
     Public Sub get_BWWa_data(ByVal t_cnt As Integer)

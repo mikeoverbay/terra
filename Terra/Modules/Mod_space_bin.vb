@@ -9,9 +9,9 @@ Module Mod_space_bin
     Public space_table_rows() As space_tables_
     Public Structure space_tables_
         Public header As String
-        Public type As Int32
-        Public section_Start As Long
-        Public section_length As Long
+        Public version As UInt32
+        Public section_Start As UInt64
+        Public section_length As UInt64
         Public data() As Byte
     End Structure
     Public Sub get_spaceBin_data(ByVal spaceBindata() As Byte)
@@ -30,9 +30,9 @@ Module Mod_space_bin
             Dim ds() = br.ReadBytes(4)
             space_table_rows(t_cnt).header = System.Text.Encoding.UTF8.GetString(ds, 0, 4)
 
-            space_table_rows(t_cnt).type = br.ReadInt32
-            space_table_rows(t_cnt).section_Start = br.ReadInt64
-            space_table_rows(t_cnt).section_length = br.ReadInt64
+            space_table_rows(t_cnt).version = br.ReadUInt32
+            space_table_rows(t_cnt).section_start = br.ReadUInt64
+            space_table_rows(t_cnt).section_length = br.ReadUInt64
             old_pos = br.BaseStream.Position
             br.BaseStream.Position = space_table_rows(t_cnt).section_Start
             space_table_rows(t_cnt).data = br.ReadBytes(space_table_rows(t_cnt).section_length)
@@ -77,38 +77,40 @@ Module Mod_space_bin
         For t_cnt = 0 To table_size - 1
             Dim header As String = space_table_rows(t_cnt).header
             Select Case True
+                Case header = "BWAL" 'Asset List
                 Case header = "BWCS"
                 Case header = "BWSG"
+                Case header = "BSGD"
+                Case header = "BWS2"
+                Case header = "BSG2"
                     get_BWSG_data(t_cnt)
-                Case header = "BWT2"
+                Case header = "BWT2" 'Terrain
                     'get_BWT2_data(t_cnt)
-                Case header = "BWSS"
-                Case header = "BSMI" 'Matrix data
+                Case header = "BSMI" 'Model Instances
                     get_BSMI_data(t_cnt)
-                Case header = "WSMI"
-                    get_WSMI_data(t_cnt)
-                Case header = "BSMO" 'models
+                Case header = "BSMO" 'Static Models
                     get_BSMO_data(t_cnt)
-                Case header = "WSMO"
-                Case header = "BSMA" 'materials
+                Case header = "BSMA" 'Static Materials
                     get_BSMA_data(t_cnt)
-                Case header = "SpTr" ' speed tree
+                Case header = "SpTr" 'Speed tree
                     get_SpTr_data(t_cnt)
-                Case header = "BWfr"
-                Case header = "WGSD" 'decals
+                Case header = "WGSD" 'Static Decals
                     get_WGSD_data(t_cnt)
-                Case header = "WTCP"
-                Case header = "BWWa" 'water
+                Case header = "WTCP" 'Control Point
+                Case header = "BWWa" 'Water
                     get_BWWa_data(t_cnt)
-                Case header = "BWSV"
-                Case header = "BWPs"
+                Case header = "BWEP" 'Environment Probe
+                Case header = "WGCO" 'Spatial Feature
+                Case header = "BWPs" 'Particles
                 Case header = "CENT"
                 Case header = "UDOS"
-                Case header = "WGDE"
+                Case header = "WGDE" 'Destructibles
                     get_BGDE_data(t_cnt) '?
-                Case header = "WGDN"
-                Case header = "BWLC"
-                Case header = "WTau"
+                Case header = "BWLC" 'Lights
+                Case header = "WTau" 'Audio
+                Case header = "WTbl" 'Benchmark Locations
+                Case header = "WGSH" 'SHVolume
+                Case header = "WGMM" 'Megalod Model Instances
 
             End Select
 

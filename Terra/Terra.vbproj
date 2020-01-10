@@ -1183,24 +1183,18 @@
     <None Include="zip\Ionic.BZip2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="zip\Ionic.BZip2.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="zip\Ionic.BZip2.pdb" />
     <None Include="zip\Ionic.BZip2.XML">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="zip\Ionic.Zip.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="zip\Ionic.Zip.pdb" />
     <None Include="zip\Ionic.Zip.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="zip\Ionic.Zlib.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="zip\Ionic.Zlib.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="zip\Ionic.Zlib.pdb" />
     <None Include="zip\Ionic.Zlib.XML">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

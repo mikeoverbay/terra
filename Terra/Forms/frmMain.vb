@@ -1012,7 +1012,7 @@ fail_path:
         npb.Location = New System.Drawing.Point(16, 0)
 
         Dim br As New Button
-        AddHandler br.MouseDown, AddressOf frmTanks.next_nation
+        AddHandler br.MouseDown, AddressOf My.Forms.frmTanks.next_nation
         br.FlatStyle = FlatStyle.Flat
         br.FlatAppearance.BorderSize = 0
         br.Width = 15
@@ -1025,7 +1025,7 @@ fail_path:
         br.Anchor = AnchorStyles.Right Or AnchorStyles.Top
 
         Dim bl As New Button
-        AddHandler bl.MouseDown, AddressOf frmTanks.prev_nation
+        AddHandler bl.MouseDown, AddressOf My.Forms.frmTanks.prev_nation
         bl.FlatStyle = FlatStyle.Flat
         bl.FlatAppearance.BorderSize = 0
         bl.Width = 15

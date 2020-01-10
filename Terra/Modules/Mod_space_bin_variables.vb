@@ -5,15 +5,6 @@ Module Mod_space_bin_variables
 
     Public bw_strings As New StringBuilder
 
-    Public table_Rows() As space_tables_
-    Public Structure space_tables_
-        Public header As String
-        Public type As Int32
-        Public section_Start As Long
-        Public section_length As Long
-        Public data() As Byte
-    End Structure
-
     Public visual_sections() As visual_sections_
 
     Public Structure visual_sections_
