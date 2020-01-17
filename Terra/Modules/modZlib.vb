@@ -991,6 +991,7 @@ dont_grab_this:
                 Else
 
                 End If
+
 skip_this:
                 Application.DoEvents()
             Next
@@ -1173,16 +1174,18 @@ skip_this:
                 End If
             End If
         End If
-        Dim hd_name = name.Replace(".dds", "_hd.dds")
-        et2 = active_pkg_hd(hd_name)
-        If et2 Is Nothing Then
-            et2 = shared_content_sandbox_part1_hd(hd_name)
+        If has_high_rez_map Then
+            Dim hd_name = name.Replace(".dds", "_hd.dds")
+            et2 = active_pkg_hd(hd_name)
             If et2 Is Nothing Then
-                et2 = shared_content_sandbox_part2_hd(name)
+                et2 = shared_content_sandbox_part1_hd(hd_name)
                 If et2 Is Nothing Then
-                    et2 = shared_content_part1_hd(hd_name)
+                    et2 = shared_content_sandbox_part2_hd(name)
                     If et2 Is Nothing Then
-                        et2 = shared_content_part2_hd(hd_name)
+                        et2 = shared_content_part1_hd(hd_name)
+                        If et2 Is Nothing Then
+                            et2 = shared_content_part2_hd(hd_name)
+                        End If
                     End If
                 End If
             End If

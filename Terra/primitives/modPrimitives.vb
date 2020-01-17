@@ -625,7 +625,7 @@ fing_loop:
                         End If
 
 
-                        .vertices(i).x = vr.ReadSingle
+                        .vertices(i).x = -vr.ReadSingle
                         .vertices(i).y = vr.ReadSingle
                         .vertices(i).z = vr.ReadSingle
                         ' 
@@ -641,7 +641,7 @@ fing_loop:
                                 .normals(i) = unpackNormal(packed)
                             End If
                         End If
-                        .UVs(i).u = vr.ReadSingle
+                        .UVs(i).u = -vr.ReadSingle
                         .UVs(i).v = vr.ReadSingle
 
                         If stride = 40 Then
@@ -688,7 +688,7 @@ fing_loop:
 
 
                         If Models.models(model_id).componets(cur_pointer).multi_textured Then
-                            .UV2s(i).u = uv2(uvPnt.a1).u
+                            .UV2s(i).u = -uv2(uvPnt.a1).u
                             .UV2s(i).v = uv2(uvPnt.a1).v
                         End If
 
@@ -704,7 +704,7 @@ fing_loop:
 
 
                         vp.Position = indice.a2
-                        .vertices(i + 1).x = vr.ReadSingle
+                        .vertices(i + 1).x = -vr.ReadSingle
                         .vertices(i + 1).y = vr.ReadSingle
                         .vertices(i + 1).z = vr.ReadSingle
                         '
@@ -720,7 +720,7 @@ fing_loop:
                                 .normals(i + 1) = unpackNormal(packed)
                             End If
                         End If
-                        .UVs(i + 1).u = vr.ReadSingle
+                        .UVs(i + 1).u = -vr.ReadSingle
                         .UVs(i + 1).v = vr.ReadSingle
 
                         If stride = 40 Then
@@ -765,7 +765,7 @@ fing_loop:
                             End If
                         End If
                         If Models.models(model_id).componets(cur_pointer).multi_textured Then
-                            .UV2s(i + 1).u = uv2(uvPnt.a2).u
+                            .UV2s(i + 1).u = -uv2(uvPnt.a2).u
                             .UV2s(i + 1).v = uv2(uvPnt.a2).v
                         End If
                         '#3
@@ -780,7 +780,7 @@ fing_loop:
 
 
                         vp.Position = indice.a3
-                        .vertices(i + 2).x = vr.ReadSingle
+                        .vertices(i + 2).x = -vr.ReadSingle
                         .vertices(i + 2).y = vr.ReadSingle
                         .vertices(i + 2).z = vr.ReadSingle
                         '
@@ -796,7 +796,7 @@ fing_loop:
                                 .normals(i + 2) = unpackNormal(packed)
                             End If
                         End If
-                        .UVs(i + 2).u = vr.ReadSingle
+                        .UVs(i + 2).u = -vr.ReadSingle
                         .UVs(i + 2).v = vr.ReadSingle
 
                         If stride = 40 Then
@@ -841,7 +841,7 @@ fing_loop:
                             End If
                         End If
                         If Models.models(model_id).componets(cur_pointer).multi_textured Then
-                            .UV2s(i + 2).u = uv2(uvPnt.a3).u
+                            .UV2s(i + 2).u = -uv2(uvPnt.a3).u
                             .UV2s(i + 2).v = uv2(uvPnt.a3).v
                         End If
 
@@ -1000,27 +1000,49 @@ dont_save_this:
         Return p
 
     End Function
+
+#If 0 Then
     Public Sub simple_vertex(ByVal mId As UInt32, ByVal cId As UInt32)
         Gl.glBegin(Gl.GL_TRIANGLES)
-        With Models.models(mId).componets(cId)
-            For i As UInt32 = 0 To (Models.models(mId).componets(cId)._count - 1) * 3 Step 3
+            For i As UInt32 = 0 To (._count - 1) * 3 Step 3
 
-                Gl.glMultiTexCoord2f(0, -.UVs(i).u, .UVs(i).v)
+                Gl.glMultiTexCoord2f(0, .UVs(i).u, .UVs(i).v)
                 Gl.glNormal3f(.normals(i).nx, .normals(i).ny, .normals(i).nz)
-                Gl.glVertex3f(-.vertices(i).x, .vertices(i).y, .vertices(i).z)
+                Gl.glVertex3f(.vertices(i).x, .vertices(i).y, .vertices(i).z)
 
-                Gl.glMultiTexCoord2f(0, -.UVs(i + 1).u, .UVs(i + 1).v)
+                Gl.glMultiTexCoord2f(0, .UVs(i + 1).u, .UVs(i + 1).v)
                 Gl.glNormal3f(.normals(i + 1).nx, .normals(i + 1).ny, .normals(i + 1).nz)
-                Gl.glVertex3f(-.vertices(i + 1).x, .vertices(i + 1).y, .vertices(i + 1).z)
+                Gl.glVertex3f(.vertices(i + 1).x, .vertices(i + 1).y, .vertices(i + 1).z)
 
-                Gl.glMultiTexCoord2f(0, -.UVs(i + 2).u, .UVs(i + 2).v)
+                Gl.glMultiTexCoord2f(0, .UVs(i + 2).u, .UVs(i + 2).v)
                 Gl.glNormal3f(.normals(i + 2).nx, .normals(i + 2).ny, .normals(i + 2).nz)
-                Gl.glVertex3f(-.vertices(i + 2).x, .vertices(i + 2).y, .vertices(i + 2).z)
+                Gl.glVertex3f(.vertices(i + 2).x, .vertices(i + 2).y, .vertices(i + 2).z)
             Next
         End With
         Gl.glEnd()
-
     End Sub
+#Else
+    Public Sub simple_vertex(ByVal mId As UInt32, ByVal cId As UInt32)
+        With Models.models(mId).componets(cId)
+            Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY)
+            Gl.glEnableClientState(Gl.GL_NORMAL_ARRAY)
+            Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY)
+
+            Gl.glClientActiveTexture(Gl.GL_TEXTURE0)
+            Gl.glTexCoordPointer(2, Gl.GL_FLOAT, 0, .UVs)
+
+            Gl.glNormalPointer(Gl.GL_FLOAT, 0, .normals)
+            Gl.glVertexPointer(3, Gl.GL_FLOAT, 0, .vertices)
+
+            Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, ._count * 3)
+
+            Gl.glDisableClientState(Gl.GL_TEXTURE_COORD_ARRAY)
+            Gl.glDisableClientState(Gl.GL_NORMAL_ARRAY)
+            Gl.glDisableClientState(Gl.GL_VERTEX_ARRAY)
+        End With
+    End Sub
+#End If
+
     Private Function convert_normal(ByVal v As vect3Norm) As Vector3D
         Dim v3d As New Vector3D
         v3d.X = v.nx
@@ -1144,66 +1166,66 @@ dont_save_this:
         Md.binormals(i + 2).nz = b3.Z
 
     End Sub
+
+#If 0 Then
     Public Sub build_primitive(ByVal mId As UInt32, ByVal cId As UInt32)
         'this routine makes the triangles from the loaded primitive data.
         If Models.models(mId).componets(cId).multi_textured Then
-
             Gl.glBegin(Gl.GL_TRIANGLES)
             With Models.models(mId).componets(cId)
-                For i As UInt32 = 0 To (Models.models(mId).componets(cId)._count - 1) * 3 Step 3
+                For i As UInt32 = 0 To (._count - 1) * 3 Step 3
                     ComputeTangentBasis_models(Models.models(mId).componets(cId), i)
                     '1-------------
-                    Gl.glMultiTexCoord2f(0, -.UVs(i).u, .UVs(i).v)
-                    Gl.glMultiTexCoord2f(1, -.UV2s(i).u, .UV2s(i).v)
+                    Gl.glMultiTexCoord2f(0, .UVs(i).u, .UVs(i).v)
+                    Gl.glMultiTexCoord2f(1, .UV2s(i).u, .UV2s(i).v)
                     Gl.glMultiTexCoord3f(2, .tangents(i).nx, .tangents(i).ny, .tangents(i).nz)
                     'Gl.glMultiTexCoord3f(3, .binormals(i).nx, .binormals(i).ny, .binormals(i).nz)
                     Gl.glNormal3f(.normals(i).nx, .normals(i).ny, .normals(i).nz)
-                    Gl.glVertex3f(-.vertices(i).x, .vertices(i).y, .vertices(i).z)
+                    Gl.glVertex3f(.vertices(i).x, .vertices(i).y, .vertices(i).z)
                     '2--------------
-                    Gl.glMultiTexCoord2f(0, -.UVs(i + 1).u, .UVs(i + 1).v)
-                    Gl.glMultiTexCoord2f(1, -.UV2s(i + 1).u, .UV2s(i + 1).v)
+                    Gl.glMultiTexCoord2f(0, .UVs(i + 1).u, .UVs(i + 1).v)
+                    Gl.glMultiTexCoord2f(1, .UV2s(i + 1).u, .UV2s(i + 1).v)
                     Gl.glMultiTexCoord3f(2, .tangents(i + 1).nx, .tangents(i + 1).ny, .tangents(i + 1).nz)
                     'Gl.glMultiTexCoord3f(3, .binormals(i + 1).nx, .binormals(i + 1).ny, .binormals(i + 1).nz)
                     Gl.glNormal3f(.normals(i + 1).nx, .normals(i + 1).ny, .normals(i + 1).nz)
-                    Gl.glVertex3f(-.vertices(i + 1).x, .vertices(i + 1).y, .vertices(i + 1).z)
+                    Gl.glVertex3f(.vertices(i + 1).x, .vertices(i + 1).y, .vertices(i + 1).z)
                     '3--------------
-                    Gl.glMultiTexCoord2f(0, -.UVs(i + 2).u, .UVs(i + 2).v)
-                    Gl.glMultiTexCoord2f(1, -.UV2s(i + 2).u, .UV2s(i + 2).v)
+                    Gl.glMultiTexCoord2f(0, .UVs(i + 2).u, .UVs(i + 2).v)
+                    Gl.glMultiTexCoord2f(1, .UV2s(i + 2).u, .UV2s(i + 2).v)
                     Gl.glMultiTexCoord3f(2, .tangents(i + 2).nx, .tangents(i + 2).ny, .tangents(i + 2).nz)
                     'Gl.glMultiTexCoord3f(3, .binormals(i + 2).nx, .binormals(i + 2).ny, .binormals(i + 2).nz)
                     Gl.glNormal3f(.normals(i + 2).nx, .normals(i + 2).ny, .normals(i + 2).nz)
-                    Gl.glVertex3f(-.vertices(i + 2).x, .vertices(i + 2).y, .vertices(i + 2).z)
+                    Gl.glVertex3f(.vertices(i + 2).x, .vertices(i + 2).y, .vertices(i + 2).z)
                 Next
             End With
             Gl.glEnd()
         Else
             Gl.glBegin(Gl.GL_TRIANGLES)
             With Models.models(mId).componets(cId)
-                For i As UInt32 = 0 To (Models.models(mId).componets(cId)._count - 1) * 3 Step 3
+                For i As UInt32 = 0 To (._count - 1) * 3 Step 3
 
                     ComputeTangentBasis_models(Models.models(mId).componets(cId), i)
 
-                    Gl.glMultiTexCoord2f(0, -.UVs(i).u, .UVs(i).v)
+                    Gl.glMultiTexCoord2f(0, .UVs(i).u, .UVs(i).v)
                     Gl.glMultiTexCoord3f(2, .tangents(i).nx, .tangents(i).ny, .tangents(i).nz)
                     'Gl.glMultiTexCoord3f(3, .binormals(i).nx, .binormals(i).ny, .binormals(i).nz)
                     Gl.glNormal3f(.normals(i).nx, .normals(i).ny, .normals(i).nz)
-                    Gl.glVertex3f(-.vertices(i).x, .vertices(i).y, .vertices(i).z)
+                    Gl.glVertex3f(.vertices(i).x, .vertices(i).y, .vertices(i).z)
 
-                    Gl.glMultiTexCoord2f(0, -.UVs(i + 1).u, .UVs(i + 1).v)
+                    Gl.glMultiTexCoord2f(0, .UVs(i + 1).u, .UVs(i + 1).v)
                     Gl.glMultiTexCoord3f(2, .tangents(i + 1).nx, .tangents(i + 1).ny, .tangents(i + 1).nz)
                     'Gl.glMultiTexCoord3f(3, .binormals(i + 1).nx, .binormals(i + 1).ny, .binormals(i + 1).nz)
                     Gl.glNormal3f(.normals(i + 1).nx, .normals(i + 1).ny, .normals(i + 1).nz)
-                    Gl.glVertex3f(-.vertices(i + 1).x, .vertices(i + 1).y, .vertices(i + 1).z)
+                    Gl.glVertex3f(.vertices(i + 1).x, .vertices(i + 1).y, .vertices(i + 1).z)
 
-                    Gl.glMultiTexCoord2f(0, -.UVs(i + 2).u, .UVs(i + 2).v)
+                    Gl.glMultiTexCoord2f(0, .UVs(i + 2).u, .UVs(i + 2).v)
                     Gl.glMultiTexCoord3f(2, .tangents(i + 2).nx, .tangents(i + 2).ny, .tangents(i + 2).nz)
                     'Gl.glMultiTexCoord3f(3, .binormals(i + 2).nx, .binormals(i + 2).ny, .binormals(i + 2).nz)
                     Gl.glNormal3f(.normals(i + 2).nx, .normals(i + 2).ny, .normals(i + 2).nz)
-                    Gl.glVertex3f(-.vertices(i + 2).x, .vertices(i + 2).y, .vertices(i + 2).z)
+                    Gl.glVertex3f(.vertices(i + 2).x, .vertices(i + 2).y, .vertices(i + 2).z)
                 Next
             End With
             Gl.glEnd()
-
         End If
         'clean up and..  save a byte or 2...thousand
         ReDim Models.models(mId).componets(cId).vertices(0)
@@ -1214,11 +1236,76 @@ dont_save_this:
         ReDim Models.models(mId).componets(cId).binormals(0)
 
     End Sub
+#Else
+    Public Sub build_primitive(ByVal mId As UInt32, ByVal cId As UInt32)
+        'this routine makes the triangles from the loaded primitive data.
+        If Models.models(mId).componets(cId).multi_textured Then
+            With Models.models(mId).componets(cId)
+                Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY)
+                Gl.glEnableClientState(Gl.GL_NORMAL_ARRAY)
+                Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY)
+
+                Gl.glClientActiveTexture(Gl.GL_TEXTURE0)
+                Gl.glTexCoordPointer(2, Gl.GL_FLOAT, 0, .UVs)
+
+                Gl.glClientActiveTexture(Gl.GL_TEXTURE1)
+                Gl.glTexCoordPointer(2, Gl.GL_FLOAT, 0, .UV2s)
+
+                Gl.glClientActiveTexture(Gl.GL_TEXTURE2)
+                Gl.glTexCoordPointer(3, Gl.GL_FLOAT, 0, .tangents)
+
+                ' Gl.glClientActiveTexture(Gl.GL_TEXTURE3)
+                ' Gl.glTexCoordPointer(3, Gl.GL_FLOAT, 0, .binormals)
+
+                Gl.glNormalPointer(Gl.GL_FLOAT, 0, .normals)
+                Gl.glVertexPointer(3, Gl.GL_FLOAT, 0, .vertices)
+
+                Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, ._count * 3)
+
+                Gl.glDisableClientState(Gl.GL_TEXTURE_COORD_ARRAY)
+                Gl.glDisableClientState(Gl.GL_NORMAL_ARRAY)
+                Gl.glDisableClientState(Gl.GL_VERTEX_ARRAY)
+            End With
+        Else
+            With Models.models(mId).componets(cId)
+                Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY)
+                Gl.glEnableClientState(Gl.GL_NORMAL_ARRAY)
+                Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY)
+
+                Gl.glClientActiveTexture(Gl.GL_TEXTURE0)
+                Gl.glTexCoordPointer(2, Gl.GL_FLOAT, 0, .UVs)
+
+                Gl.glClientActiveTexture(Gl.GL_TEXTURE2)
+                Gl.glTexCoordPointer(3, Gl.GL_FLOAT, 0, .tangents)
+
+                ' Gl.glClientActiveTexture(Gl.GL_TEXTURE3)
+                ' Gl.glTexCoordPointer(3, Gl.GL_FLOAT, 0, .binormals)
+
+                Gl.glNormalPointer(Gl.GL_FLOAT, 0, .normals)
+                Gl.glVertexPointer(3, Gl.GL_FLOAT, 0, .vertices)
+
+                Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, ._count * 3)
+
+                Gl.glDisableClientState(Gl.GL_TEXTURE_COORD_ARRAY)
+                Gl.glDisableClientState(Gl.GL_NORMAL_ARRAY)
+                Gl.glDisableClientState(Gl.GL_VERTEX_ARRAY)
+            End With
+        End If
+        'clean up and..  save a byte or 2...thousand
+        ReDim Models.models(mId).componets(cId).vertices(0)
+        ReDim Models.models(mId).componets(cId).UVs(0)
+        ReDim Models.models(mId).componets(cId).UV2s(0)
+        ReDim Models.models(mId).componets(cId).normals(0)
+        ReDim Models.models(mId).componets(cId).tangents(0)
+        ReDim Models.models(mId).componets(cId).binormals(0)
+    End Sub
+#End If
+
     Public Sub make_prim_list(ByVal id As UInt32)
         If Models.models(id).componets IsNot Nothing Then
             Dim Nmods As Integer
             If Models.models(id)._count = 0 Then
-                GoTo notToday
+                GoTo nottoday
             End If
             loaded_models.names.Add(Models.Model_list(id))
             'Add this model to the list of loaded models so we dont load it again.
