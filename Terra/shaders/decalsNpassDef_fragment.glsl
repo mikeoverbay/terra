@@ -94,8 +94,7 @@ void main(){
    
     vec4 bump_out;
 
-    bump_out.xyz = normalize(bump.xyz + n.xyz)*0.5+0.5; // put in 0.0 to 1.0 range.
+    bump_out.xyz = normalize(bump.xyz + n.xyz*0.005)*0.5+0.5; // put in 0.0 to 1.0 range.
     bump_out.w = bump.w;
     gl_FragColor = mix(normalDef, bump_out, color.a);
-
     }
