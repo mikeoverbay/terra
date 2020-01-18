@@ -29,6 +29,16 @@ Imports Ionic.BZip2
 Imports Ionic
 
 Module modOpenGL
+    <UnmanagedFunctionPointer(CallingConvention.Winapi)>
+    Public Delegate Function wglCreateContextAttribsARBDelegate(hDC As IntPtr, hshareContext As IntPtr, attribList() As Integer) As IntPtr
+    Public wglCreateContextAttribsARB As wglCreateContextAttribsARBDelegate
+
+    ' For info: https://www.khronos.org/registry/OpenGL/extensions/ARB/WGL_ARB_create_context.txt
+    Const WGL_CONTEXT_MAJOR_VERSION_ARB = &H2091
+    Const WGL_CONTEXT_MINOR_VERSION_ARB = &H2092
+    Const WGL_CONTEXT_PROFILE_MASK_ARB = &H9126
+    Const WGL_CONTEXT_CORE_PROFILE_BIT_ARB = &H1
+    Const WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB = &H2
 
     Public stars_display_id As Integer
     Public field_of_view As Single = 60.0
@@ -99,10 +109,33 @@ try_again:
             MessageBox.Show("Unable to set pixel format")
             End
         End If
+
+#If 1 Then
         pb1_hRC = Wgl.wglCreateContext(pb1_hDC)
         pb2_hRC = Wgl.wglCreateContext(pb2_hDC)
         pb3_hRC = Wgl.wglCreateContext(pb3_hDC)
         pb4_hRC = Wgl.wglCreateContext(pb4_hDC)
+#Else
+        ' TODO: 3.3 core profile
+        Dim temp_hRC = Wgl.wglCreateContext(pb1_hDC)
+        Wgl.wglMakeCurrent(pb1_hDC, temp_hRC)
+
+        wglCreateContextAttribsARB = Wgl.GetDelegate("wglCreateContextAttribsARB", GetType(wglCreateContextAttribsARBDelegate))
+        Wgl.wglDeleteContext(temp_hRC)
+
+        Dim attribs() = {
+            WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+            WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+            WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+            0
+        }
+
+        pb1_hRC = wglCreateContextAttribsARB(pb1_hDC, 0, attribs)
+        pb2_hRC = wglCreateContextAttribsARB(pb2_hDC, 0, attribs)
+        pb3_hRC = wglCreateContextAttribsARB(pb3_hDC, 0, attribs)
+        pb4_hRC = wglCreateContextAttribsARB(pb4_hDC, 0, attribs)
+#End If
+
         If pb1_hRC.ToInt32 = 0 Then
             MessageBox.Show("Unable to get rendering context pb1")
             End
