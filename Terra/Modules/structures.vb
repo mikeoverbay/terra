@@ -164,10 +164,8 @@ Module structures
     Public treeCache(0) As flora_
     Public Structure tree_textures_
         Public name As String
-        Public name2 As String
         Public normalname As String
         Public textureID As Integer
-        Public texture2ID As Integer
         Public textureNormID As Integer
     End Structure
 

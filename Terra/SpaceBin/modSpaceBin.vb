@@ -186,10 +186,12 @@ Module modSpaceBin
         '----------------------------------------------------------------------------------
         ' remove models that we dont want on the map
         Dim mc As Int32 = 0
-        Dim HQ As Integer = 1
         Dim tm(cBSMI.model_BSMO_indexes.Length - 1) As model_matrix_list_
         For i = 0 To cBSMI.model_BSMO_indexes.Length - 1
-            If cBSMI.model_BSMO_indexes(i).BSMO_extras = HQ Then
+            If Model_Matrix_list(i).primitive_name.Contains("env_EU_001") Then
+                'Stop
+            End If
+            If Not Model_Matrix_list(i).primitive_name.ToLower.Contains("outland") Then
                 If cBSMI.vis_mask(i).mask = &HFFFFFFFF Then 'visibility mask
                     tm(mc) = New model_matrix_list_
                     tm(mc) = Model_Matrix_list(i)

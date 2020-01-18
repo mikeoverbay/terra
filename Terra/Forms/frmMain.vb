@@ -2418,7 +2418,7 @@ skip:
                         Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(1).text_id)
 
                         Gl.glActiveTexture(Gl.GL_TEXTURE0 + 1)
-                        Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(2).text_id)
+                        Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(1).text_id2)
 
                         Gl.glActiveTexture(Gl.GL_TEXTURE0 + 2)
                         Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(3).text_id)
@@ -2430,7 +2430,7 @@ skip:
                         Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(1).norm_id)
 
                         Gl.glActiveTexture(Gl.GL_TEXTURE0 + 5)
-                        Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(2).norm_id)
+                        Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(1).norm_id2)
 
                         Gl.glActiveTexture(Gl.GL_TEXTURE0 + 6)
                         Gl.glBindTexture(Gl.GL_TEXTURE_2D, map_layers(i).layers(3).norm_id)

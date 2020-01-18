@@ -1371,8 +1371,8 @@ jump_color:
                 cnt = texture_cache.Length
                 '	'Check if we have this texture generated already.....
                 For i = 0 To cnt - 1
-                    If .color2_name = texture_cache(i).name2 Then
-                        .color2_Id = texture_cache(i).texture2ID
+                    If .color2_name = texture_cache(i).name Then
+                        .color2_Id = texture_cache(i).textureID
                         saved_texture_loads += 1
                         got_it = True
                         GoTo check_normal
@@ -1398,8 +1398,8 @@ jump_color:
                 cnt = texture_cache.Length
                 ReDim Preserve texture_cache(cnt)
                 texture_cache(cnt - 1) = New tree_textures_
-                texture_cache(cnt - 1).name2 = .color2_name
-                texture_cache(cnt - 1).texture2ID = .color2_Id
+                texture_cache(cnt - 1).name = .color2_name
+                texture_cache(cnt - 1).textureID = .color2_Id
             End If
             '----------------------------------------------------------------------------------- normal map
             '------------------------- # 3 -----------------------------'

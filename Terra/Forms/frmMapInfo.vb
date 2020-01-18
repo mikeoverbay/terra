@@ -63,12 +63,7 @@
                 Return
             End If
         Next
-        For i = 0 To texture_cache.Length - 1
-            If shr_name = texture_cache(i).name2 Then
-                show_texture(texture_cache(i).texture2ID)
-                Return
-            End If
-        Next
+
         For i = 0 To texture_cache.Length - 1
             If shr_name = texture_cache(i).normalname Then
                 show_texture(texture_cache(i).textureNormID)

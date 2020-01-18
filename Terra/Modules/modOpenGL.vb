@@ -64,28 +64,28 @@ try_again:
         Next
 
     End Sub
-	Public Sub EnableOpenGL()
+    Public Sub EnableOpenGL()
         frmMain.pb2.visible = False
-		frmMain.pb2.SendToBack()
-		pb1_hDC = User.GetDC(frmMain.pb1.Handle)
+        frmMain.pb2.SendToBack()
+        pb1_hDC = User.GetDC(frmMain.pb1.Handle)
         pb2_hDC = User.GetDC(frmMain.pb2.Handle)
         pb3_hDC = User.GetDC(frmTestView.pb3.Handle)
         pb4_hDC = User.GetDC(frmMain.pb4.Handle)
         Dim pfd As Gdi.PIXELFORMATDESCRIPTOR
-		Dim PixelFormat As Integer
+        Dim PixelFormat As Integer
 
-		'ZeroMemory(pfd, Len(pfd))
-		pfd.nSize = Len(pfd)
-		pfd.nVersion = 1
+        'ZeroMemory(pfd, Len(pfd))
+        pfd.nSize = Len(pfd)
+        pfd.nVersion = 1
         pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW Or Gdi.PFD_SUPPORT_OPENGL Or Gdi.PFD_DOUBLEBUFFER Or Gdi.PFD_GENERIC_ACCELERATED
-		pfd.iPixelType = Gdi.PFD_TYPE_RGBA
-		pfd.cColorBits = 32
+        pfd.iPixelType = Gdi.PFD_TYPE_RGBA
+        pfd.cColorBits = 32
         pfd.cDepthBits = 24
         pfd.cStencilBits = 8
-		pfd.cAlphaBits = 8
-		pfd.iLayerType = Gdi.PFD_MAIN_PLANE
+        pfd.cAlphaBits = 8
+        pfd.iLayerType = Gdi.PFD_MAIN_PLANE
 
-		PixelFormat = Gdi.ChoosePixelFormat(pb1_hDC, pfd)
+        PixelFormat = Gdi.ChoosePixelFormat(pb1_hDC, pfd)
         PixelFormat = Gdi.ChoosePixelFormat(pb2_hDC, pfd)
         PixelFormat = Gdi.ChoosePixelFormat(pb3_hDC, pfd)
         PixelFormat = Gdi.ChoosePixelFormat(pb4_hDC, pfd)
@@ -93,10 +93,10 @@ try_again:
             MessageBox.Show("Unable to retrieve pixel format")
             End
         End If
-		If Not (Gdi.SetPixelFormat(pb1_hDC, PixelFormat, pfd)) Then
-			MessageBox.Show("Unable to set pixel format")
-			End
-		End If
+        If Not (Gdi.SetPixelFormat(pb1_hDC, PixelFormat, pfd)) Then
+            MessageBox.Show("Unable to set pixel format")
+            End
+        End If
         If Not (Gdi.SetPixelFormat(pb2_hDC, PixelFormat, pfd)) Then
             MessageBox.Show("Unable to set pixel format")
             End
@@ -161,7 +161,7 @@ try_again:
         'Glut.glutInitDisplayMode(GLUT_RGBA Or GLUT_DOUBLE Or GLUT_MULTISAMPLE)
         Glut.glutInitDisplayMode(GLUT_RGBA Or GLUT_SINGLE)
 
-		Gl.glViewport(0, 0, frmMain.pb1.Width, frmMain.pb1.Height)
+        Gl.glViewport(0, 0, frmMain.pb1.Width, frmMain.pb1.Height)
         Dim e = Gl.glGetError
         If e <> 0 Then
             Dim s = Glu.gluErrorString(e).ToString
@@ -169,11 +169,11 @@ try_again:
             MsgBox("Function: " + ms + vbCrLf + "Error! " + s, MsgBoxStyle.Exclamation, "OpenGL Issue")
         End If
 
-		Gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F)
-		Gl.glEnable(Gl.GL_COLOR_MATERIAL)
-		Gl.glEnable(Gl.GL_LIGHT0)
-		Gl.glEnable(Gl.GL_LIGHTING)
-		gl_set_lights()
+        Gl.glClearColor(0.0F, 0.0F, 0.0F, 1.0F)
+        Gl.glEnable(Gl.GL_COLOR_MATERIAL)
+        Gl.glEnable(Gl.GL_LIGHT0)
+        Gl.glEnable(Gl.GL_LIGHTING)
+        gl_set_lights()
         Wgl.wglShareLists(pb1_hRC, pb2_hRC)
         Wgl.wglShareLists(pb1_hRC, pb3_hRC)
         Wgl.wglShareLists(pb1_hRC, pb4_hRC)
@@ -187,8 +187,8 @@ try_again:
         'create_decal_FBO()
         G_Buffer.init()
         'next line creates the FBOs and Textures needed to shadow map. Still under development.
-		'frmMain.create_shadow_render_texture()
-		frmMain.pb2.visible = False
+        'frmMain.create_shadow_render_texture()
+        frmMain.pb2.visible = False
         Gl.glGetIntegerv(Gl.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, max_texture_units)
         Dim gl_strings As String
         gl_strings = Gl.glGetString(Gl.GL_EXTENSIONS).Replace(vbLf, vbCrLf)

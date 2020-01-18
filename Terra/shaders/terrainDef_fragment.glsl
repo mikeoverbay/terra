@@ -61,7 +61,7 @@ void main(void)
     // lets check for a hole before doing any math.. It saves time
     if (has_holes > 0.0)
       {
-        if ( hole >0.0) {discard;}
+        //if ( hole >0.0) {discard;}
       }
     vec4 t1;
     vec4 t2;
@@ -85,10 +85,10 @@ void main(void)
     vec3 vAmbient = vec3(l_ambient, l_ambient, l_ambient);
 
     //calcualte texcoords for mix texture.
-    float scale = 256.0/272.0;
+    float scale = 128.0/144.0;
     mix_coords = color_uv;
     mix_coords *= scale;
-    mix_coords += .030303030;// = 8/264
+    mix_coords += .0588235;// = 8/264
     // layer 4 ---------------------------------------------
     vec2 tv4;
     tv4 = vec2(dot(-layer3U, Vertex), dot(layer3V, Vertex));
@@ -103,48 +103,48 @@ void main(void)
     vec2 tv2;
     tv2 = vec2(dot(-layer1U, Vertex), dot(layer1V, Vertex));
     t2 = texture2D(layer_2, -tv2 + .5);
-    n2 = texture2D(n_layer_2, -tv2 + .5);
+    n2 = texture2D(n_layer_2, color_uv);
     // layer 1 ---------------------------------------------
     vec2 tv1;
     tv1 = vec2(dot(-layer0U, Vertex), dot(layer0V, Vertex));
     t1 = texture2D(layer_1, -tv1 + .5);
-    n1 = texture2D(n_layer_1, -tv1 + .5);
+    n1 = texture2D(n_layer_1, color_uv);
     //------------------------------------------------------------------
     
     MixLevel = texture2D(mixtexture, mix_coords.xy).rgba;
    
     //Which ever is the Color_Tex can't be translated.
-    t1 = mix(texture2D(layer_1, color_uv), t1, mask_2.r);
-    t2 = mix(texture2D(layer_2, color_uv), t2, mask_2.g);
+    t1 = mix(texture2D(layer_1, color_uv), t1, 0)+vec4(0.3,0.3,0.3,1.0);
+    t2 = mix(texture2D(layer_2, color_uv), t2, 0)+vec4(0.3,0.3,0.3,1.0);
     t3 = mix(texture2D(layer_3, color_uv), t3, mask_2.b);
     t4 = mix(texture2D(layer_4, color_uv), t4, mask_2.a);
     //
      
     //Now we mix our color
     vec4 base;
-    base  = t4 * MixLevel.a ;
+    base  = t4 * MixLevel.r ;
     base += t3 * MixLevel.b ;
     base += t2 * MixLevel.g ;
-    base += t1 * MixLevel.r ;
+    base += t1 * MixLevel.a ;
    
 
     float spec;
     spec  = n4.a * MixLevel.a ;
     spec += n3.a * MixLevel.b ;
-    spec += n2.a * MixLevel.g ;
-    spec += n1.a * MixLevel.r ;
+    spec = n2.a * MixLevel.g ;
+    spec += n1.a * MixLevel.a ;
 
     //This blends between low and highrez by distance
     //We remove the color_tex from the low rez image as its added back
     //after the lighting is calculated. This makes the colors of
     //the textures less washed out.
-    base.rgb = mix(texture2D(colorMap, color_uv).rgb, base.rgb, ln) ;
+    //base.rgb = mix(texture2D(colorMap, color_uv).rgb, base.rgb, ln) ;
 
     //Get our normal maps.
-    n1.rgb = normalize(2.0 * n1.rgb - 1.0) * MixLevel.r;
+    n1.rgb = normalize(2.0 * n1.rgb - 1.0) * MixLevel.a;
     n2.rgb = normalize(2.0 * n2.rgb - 1.0) * MixLevel.g;
     n3.rgb = normalize(2.0 * n3.rgb - 1.0) * MixLevel.b;
-    n4.rgb = normalize(2.0 * n4.rgb - 1.0) * MixLevel.a;
+    n4.rgb = normalize(2.0 * n4.rgb - 1.0) * MixLevel.b;
     //flip Y axis
     n1.y *= -1.0;
     n2.y *= -1.0;
@@ -160,13 +160,14 @@ void main(void)
     vec4 out_n = vec4(N,0.0);
     out_n = add_norms(out_n, n1 );
     out_n = add_norms(out_n, n2 );
-    out_n = add_norms(out_n, n3 );
-    out_n = add_norms(out_n, n4 );
+    //out_n = add_norms(out_n, n3 );
+    //out_n = add_norms(out_n, n4 );
 
-  
-    gColor = base*0.0001 + texture2D(layer_1, color_uv);;
+  float red = MixLevel.a;
+    MixLevel.r = red;
+    gColor = base;//*0.0001 + MixLevel;
 gColor.a = 1.0;
-    gNormal.xyz = normalize(out_n.xyz * 0.0001 + n.xyz)*0.5+0.5;
+    gNormal.xyz = normalize(out_n.xyz )*0.5+0.5;
     gNormal.a = spec;
     gPosition = world_vertex;
     gFlag =(64.0/255.0);
