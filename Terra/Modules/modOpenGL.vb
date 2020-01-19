@@ -152,10 +152,13 @@ try_again:
             MessageBox.Show("Unable to get rendering context pb3")
             End
         End If
+
         If Not (Wgl.wglMakeCurrent(pb1_hDC, pb1_hRC)) Then
             MessageBox.Show("Unable to make rendering context current")
             End
         End If
+
+        Wgl.ReloadFunctions()
 
         Glut.glutInit()
         'Glut.glutInitDisplayMode(GLUT_RGBA Or GLUT_DOUBLE Or GLUT_MULTISAMPLE)
@@ -190,9 +193,6 @@ try_again:
         'frmMain.create_shadow_render_texture()
         frmMain.pb2.visible = False
         Gl.glGetIntegerv(Gl.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, max_texture_units)
-        Dim gl_strings As String
-        gl_strings = Gl.glGetString(Gl.GL_EXTENSIONS).Replace(vbLf, vbCrLf)
-        gl_strings = gl_strings.Replace(" ", vbCrLf)
 
         'noise_map_id = Load_DDS_File(Application.StartupPath + "\Resources\noise.dds")
         '-----------------------------------
@@ -206,14 +206,11 @@ try_again:
         '-----------------------------------
         Dim maxAttach = 0
         Gl.glGetIntegerv(Gl.GL_MAX_COLOR_ATTACHMENTS_EXT, maxAttach)
-        '================================================================
-        'this hangs the app for some reason
-        'Dim rs = Wgl.wglGetExtensionsStringARB(pb1_hDC)
 
-        'If gl_strings.ToLower.Contains("wgl_ext_swap_control") Then
-        '    Wgl.wglSwapIntervalEXT(1)
-        'End If
-        '================================================================
+        ' Enable Vsync
+        If Wgl.IsExtensionSupported("WGL_EXT_swap_control") Then
+            Wgl.wglSwapIntervalEXT(1)
+        End If
     End Sub
 
 
